@@ -26,7 +26,7 @@ import java.util.Properties;
 @EnableTransactionManagement
 @PropertySource("db.properties")
 public class DataBaseConfig {
-    @Resource
+   @Resource
     private Environment env;
 
     @Bean
@@ -57,7 +57,7 @@ public class DataBaseConfig {
         }
     }
 
-    @Bean
+    @Bean(name="dataSource")
     public DataSource dataSource(){
         BasicDataSource ds=new BasicDataSource();
         ds.setUrl(env.getRequiredProperty("db.url"));

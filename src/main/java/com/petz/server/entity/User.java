@@ -1,25 +1,39 @@
 package com.petz.server.entity;
 
 import org.hibernate.annotations.GenericGenerator;
-
+import org.springframework.security.core.GrantedAuthority;
 import javax.persistence.*;
+import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
-@Table(name="users")
+@Table(name="users", uniqueConstraints = {
+        @UniqueConstraint(columnNames = {
+                "userName"
+        })
+})
 public class User{
     @Id
     @GeneratedValue(generator = "increment")
     @GenericGenerator(name="increment",strategy = "increment")
     private int userId;
-    @Column(name="userName",nullable=false, length = 30)
+    @Column(name="userName",nullable=false)
     private String userName;
-    @Column(name="password", nullable = false,length = 30)
+    @Column(name="password", nullable = false)
     private String password;
-    @Column(name="type",nullable = false,length = 30)
-    private String type;
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "user_roles",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id"))
+    private Set<Role> roles = new HashSet<>();
 
     public User(){
 
+    }
+    public User( String username,  String password) {
+        this.userName = username;
+        this.password = password;
     }
 
     public void setUserName(String userName) {
@@ -34,10 +48,6 @@ public class User{
         this.userId = userId;
     }
 
-    public void setType(String type) {
-        this.type = type;
-    }
-
     public int getUserId() {
         return userId;
     }
@@ -50,9 +60,11 @@ public class User{
         return password;
     }
 
-    public String getType(){
-        return type;
+    public Set<Role> getRoles() {
+        return roles;
     }
 
-
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
+    }
 }
