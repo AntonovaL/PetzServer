@@ -4,9 +4,13 @@ import javax.validation.Valid;
 
 import com.petz.server.entity.Role;
 import com.petz.server.entity.User;
+import com.petz.server.entity.UserData;
 import com.petz.server.repository.RoleRepository;
+import com.petz.server.repository.UserDataRepository;
 import com.petz.server.repository.UserRepository;
+import com.petz.server.requests.UserDataForm;
 import com.petz.server.security.jwt.JwtProvider;
+import com.petz.server.security.services.UserPrinciple;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +20,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.WebAuthenticationDetails;
 import org.springframework.web.bind.annotation.*;
 
 import com.petz.server.security.jwt.authentication.response.Response;
@@ -26,7 +31,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 @RestController
-@RequestMapping("/api/auth")
+@RequestMapping("/auth")
 public class TestController {
 
     @Autowired
@@ -44,6 +49,7 @@ public class TestController {
     @Autowired
     JwtProvider jwtProvider;
 
+
     @PostMapping("/signin")
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginForm loginRequest) {
 
@@ -53,9 +59,7 @@ public class TestController {
                         loginRequest.getPassword()
                 )
         );
-
         SecurityContextHolder.getContext().setAuthentication(authentication);
-
         String jwt = jwtProvider.generateJwtToken(authentication);
         return ResponseEntity.ok(new Response(jwt));
     }
@@ -101,9 +105,4 @@ public class TestController {
         return ResponseEntity.ok().body("User registered successfully!");
     }
 
-    @GetMapping("/getMessage")
-    @PreAuthorize("hasRole('USER')")
-    public String getMessage(){
-        return "Hello from user";
-    }
 }

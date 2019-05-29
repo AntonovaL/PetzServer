@@ -20,7 +20,7 @@ public class Response {
         return type;
     }
 
-    public void setTokenType(String tokenType) {
+   public void setTokenType(String tokenType) {
         this.type = tokenType;
     }
 }
