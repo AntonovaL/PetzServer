@@ -1,5 +1,6 @@
 package com.petz.server.controller;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import com.petz.server.entity.Role;
@@ -11,11 +12,14 @@ import com.petz.server.repository.UserRepository;
 import com.petz.server.requests.UserDataForm;
 import com.petz.server.security.jwt.JwtProvider;
 import com.petz.server.security.services.UserPrinciple;
+import com.petz.server.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.RememberMeAuthenticationToken;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -28,17 +32,21 @@ import com.petz.server.security.jwt.authentication.request.LoginForm;
 import com.petz.server.security.jwt.authentication.request.SignUpForm;
 import  com.petz.server.entity.RoleName;
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
 @RestController
 @RequestMapping("/auth")
-public class TestController {
+public class SecurityController {
 
     @Autowired
     AuthenticationManager authenticationManager;
 
     @Autowired
     UserRepository userRepository;
+
+    @Autowired
+    UserService userService;
 
     @Autowired
     RoleRepository roleRepository;
@@ -61,6 +69,8 @@ public class TestController {
         );
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String jwt = jwtProvider.generateJwtToken(authentication);
+        String refreshToken=jwtProvider.generateJwtTokenRefresh(authentication);
+        UserPrinciple user=(UserPrinciple) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         return ResponseEntity.ok(new Response(jwt));
     }
 
@@ -104,5 +114,6 @@ public class TestController {
 
         return ResponseEntity.ok().body("User registered successfully!");
     }
+
 
 }

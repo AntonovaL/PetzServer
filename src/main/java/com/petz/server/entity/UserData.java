@@ -13,15 +13,18 @@ public class UserData {
     String phoneNumber;
     @Column(name="city")
     String city;
+    @Column(name="type")
+    String type;
 
     public UserData(){
 
     }
-    public UserData(int userId, String name, String phoneNumber, String city){
+    public UserData(int userId, String name, String phoneNumber, String city, String type){
         this.userId=userId;
         this.name=name;
         this.phoneNumber=phoneNumber;
         this.city=city;
+        this.type=type;
     }
    public void setUser_id(int userId){
        this.userId=userId;
@@ -41,6 +44,14 @@ public class UserData {
 
     public void setCity(String city) {
         this.city = city;
+    }
+
+    public void setType(String type){
+        this.type=type;
+    }
+
+    public String getType(){
+        return type;
     }
 
     public String getPhoneNumber() {

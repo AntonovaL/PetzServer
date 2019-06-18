@@ -26,7 +26,7 @@ public class DataController {
         //UserData ud=new UserData()
         UserPrinciple user=(UserPrinciple) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         int id=user.getId();
-        UserData ud=new UserData(id,userDataForm.getName(),userDataForm.getPhoneNumber(), userDataForm.getCity());
+        UserData ud=new UserData(id,userDataForm.getName(),userDataForm.getPhoneNumber(), userDataForm.getCity(),userDataForm.getType());
         System.out.println(userDataForm.getName());
         userDataRepository.save(ud);
         return ResponseEntity.ok().body("Data added successfully!");
@@ -39,11 +39,11 @@ public class DataController {
         int id=user.getId();
         try {
             UserData ud = userDataRepository.getOne(id);
-            UserDataResponse response = new UserDataResponse(ud);
+            UserDataResponse response=new UserDataResponse(ud);
             return ResponseEntity.ok().body(response);
         }
         catch (Exception e){
-            return  new ResponseEntity<String>("Fail -> Data does'not exists!",
+            return  new ResponseEntity<String>("Data does'not exists!",
                     HttpStatus.BAD_REQUEST);
         }
     }

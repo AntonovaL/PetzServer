@@ -12,6 +12,8 @@ public class UserDataForm {
     @NotBlank
     private String city;
 
+    @NotBlank String type;
+
     public void setCity(String city) {
         this.city = city;
     }
@@ -35,4 +37,8 @@ public class UserDataForm {
     public String getName() {
         return name;
     }
+
+    public void setType(String type){ this.type=type; }
+
+    public String getType(){return  this.type;}
 }

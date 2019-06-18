@@ -6,11 +6,13 @@ public class UserDataResponse {
     private String name;
     private String phoneNumber;
     private String city;
+    private String type;
 
     public UserDataResponse(UserData ud){
         name=ud.getName();
         phoneNumber=ud.getPhoneNumber();
         city=ud.getCity();
+        type=ud.getType();
     }
 
     public String getName() {
@@ -35,6 +37,12 @@ public class UserDataResponse {
 
     public void setCity(String city) {
         this.city = city;
+    }
+
+    public void setType(String type){this.type=type;}
+
+    public String getType(){
+        return type;
     }
 
 }
